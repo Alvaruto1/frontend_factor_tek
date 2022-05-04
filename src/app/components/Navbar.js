@@ -27,33 +27,38 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/financial_solutions">
+              <Link className="nav-link" to="/demands">
                 FINANCIAL SOLUTIONS
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/financial_solutions">
+              <Link className="nav-link" to="/demands">
                 ABOUT US
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/financial_solutions">
+              <Link className="nav-link" to="/demands">
                 FAQs
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/financial_solutions">
+              <Link className="nav-link" to="/demands">
                 REFFERALS
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/financial_solutions">
+              <Link className="nav-link" to="/demands">
                 GET STARTED
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/financial_solutions">
+              <Link className="nav-link" to="/demands">
                 CONTACT US
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/demands">
+                DEMANDS
               </Link>
             </li>
           </ul>

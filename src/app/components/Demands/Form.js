@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
-import { addDemand } from "../../actions/demand_actions";
+import { editDemand, getAllDemands } from "../../actions/demand_actions";
 
-export default function Form() {
+export default function Form(props) {
+  const { object, closeModal } = props;
   const [referred, isReferred] = useState(false);
-  const [aplicant, setAplicant] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [name, setName] = useState("");
-  const [solutionType, setSolutionType] = useState("");
-  const [refferedBy, setRefferedBy] = useState("");
-  const [comment, setComment] = useState("");
-
+  const [aplicant, setAplicant] = useState(object.applicant_names);
+  const [email, setEmail] = useState(object.company_email);
+  const [phone, setPhone] = useState(object.phone_number);
+  const [name, setName] = useState(object.company_name);
+  const [solutionType, setSolutionType] = useState(object.solution_type);
+  const [refferedBy, setRefferedBy] = useState(object.reffered_by);
+  const [comment, setComment] = useState(object.additional_comments);
+  useEffect(() => {
+    fillForm();
+    if (object.reffered_by !== "") {
+      isReferred(true);
+    }
+  }, [object]);
   const dispatch = useDispatch();
   const onSubmitForm = (e) => {
     e.preventDefault();
@@ -24,24 +30,38 @@ export default function Form() {
       solution_type: solutionType,
       reffered_by: refferedBy,
       additional_comments: comment,
-    };    
-    dispatch(addDemand(demand)).then(() => {
-      Swal.fire({
-        text: "Sent demand with success!",
-        icon: "success",
+    };
+    dispatch(editDemand(object.id, demand))
+      .then(() => {
+        Swal.fire({
+          text: "Updated demand with success!",
+          icon: "success",
+        });
+        clearForm();
+        dispatch(getAllDemands());
+        closeModal();
+      })
+      .catch(() => {
+        Swal.fire({
+          text: "Error sending demand!",
+          icon: "error",
+        });
       });
-      clearForm();
-    }).catch(() => {
-      Swal.fire({
-        text: "Error sending demand!",
-        icon: "error",
-        }) });
-    
   };
 
   const onChangeRadioSolution = (e) => {
     setSolutionType(e.target.value);
   };
+  const fillForm = () => {
+    setAplicant(object.applicant_names);
+    setEmail(object.company_email);
+    setPhone(object.phone_number);
+    setName(object.company_name);
+    setSolutionType(object.solution_type);
+    setRefferedBy(object.reffered_by);
+    setComment(object.additional_comments);
+  };
+
   const clearForm = () => {
     setAplicant("");
     setEmail("");
@@ -53,7 +73,7 @@ export default function Form() {
   };
 
   return (
-    <form className="w-75 p-1 m-5" onSubmit={onSubmitForm}>
+    <form className="bg-white" onSubmit={onSubmitForm}>
       <div className="row m-2">
         <div className="col">
           <label htmlFor="names" className="form-label">
@@ -167,7 +187,7 @@ export default function Form() {
                 type="radio"
                 name="referred"
                 id="yes"
-                value="yes"
+                checked={referred}
                 onChange={() => isReferred(true)}
               />
               <label className="form-check-label" htmlFor="yes">
@@ -181,7 +201,7 @@ export default function Form() {
                 type="radio"
                 name="referred"
                 id="no"
-                value="no"
+                checked={!referred}
                 onChange={() => isReferred(false)}
               />
               <label className="form-check-label" htmlFor="no">
